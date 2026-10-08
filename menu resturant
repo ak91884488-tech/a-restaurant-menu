@@ -1,0 +1,85 @@
+#include <iostream>
+#include <string>
+#include <stdexcept>
+using namespace std;
+
+class MenuItem
+{
+private:
+    int id;
+    string name;
+    double price;
+    bool available;
+
+public:
+    // Constructor
+    MenuItem(int itemId, string itemName, double itemPrice, bool itemAvailable)
+    {
+        id = itemId;
+        name = itemName;
+        setPrice(itemPrice);
+        available = itemAvailable;
+    }
+
+    // Price validation
+    void setPrice(double newPrice)
+    {
+        if (newPrice < 0)
+        {
+            throw invalid_argument("Price cannot be negative.");
+        }
+
+        price = newPrice;
+    }
+
+    // Toggle availability
+    void toggleAvailability()
+    {
+        available = !available;
+    }
+
+    // Display menu item
+    void display() const
+    {
+        cout << "ID: " << id << endl;
+        cout << "Name: " << name << endl;
+        cout << "Price: $" << price << endl;
+        cout << "Availability: "
+             << (available ? "Available" : "Not Available")
+             << endl;
+        cout << "------------------------" << endl;
+    }
+};
+
+int main()
+{
+    try
+    {
+        // 3 sample menu items
+        MenuItem item1(1, "Burger", 120.0, true);
+        MenuItem item2(2, "Pizza", 180.0, true);
+        MenuItem item3(3, "Pasta", 150.0, false);
+
+        cout << "Original Menu:" << endl;
+        item1.display();
+        item2.display();
+        item3.display();
+
+        // Test toggle availability
+        cout << "\nTesting Toggle Availability:" << endl;
+
+        item3.toggleAvailability();
+        item3.display();
+
+        // Test price validation
+        cout << "\nTesting Negative Price Validation:" << endl;
+
+        MenuItem invalidItem(4, "Invalid Item", -50.0, true);
+    }
+    catch (const invalid_argument& e)
+    {
+        cout << "Validation Error: " << e.what() << endl;
+    }
+
+    return 0;
+}
